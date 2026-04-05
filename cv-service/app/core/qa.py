@@ -16,9 +16,12 @@ _model = None
 def _get_model():
     global _processor, _model
     if _processor is None:
-        _processor = BlipProcessor.from_pretrained(settings.BLIP_MODEL)
-        _model = BlipForQuestionAnswering.from_pretrained(settings.BLIP_MODEL)
-        _model.eval()
+        try:
+            _processor = BlipProcessor.from_pretrained(settings.BLIP_MODEL)
+            _model = BlipForQuestionAnswering.from_pretrained(settings.BLIP_MODEL)
+            _model.eval()
+        except Exception as e:
+            raise FileNotFoundError(f"BLIP model unavailable: {e}")
     return _processor, _model
 
 
